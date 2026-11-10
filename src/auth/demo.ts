@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Demo mode is a sandboxed preview: fake in-browser data, no Supabase calls, no real accounts.
 // It is safe to expose publicly, so visitors can opt in at runtime with "Try demo" on the
 // login page (remembered for the browser tab via sessionStorage).
@@ -24,3 +25,8 @@ export function writeDemoSession(on: boolean): void {
     // Storage can be blocked (private mode); demo still works until the page reloads.
   }
 }
+=======
+// Demo mode only exists in `vite` dev server builds. import.meta.env.DEV is statically
+// false in production builds, so this can never bypass authentication there.
+export const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true'
+>>>>>>> 9c5fb0654ec9282aeab168918e547aeca97eca36
