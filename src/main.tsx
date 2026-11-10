@@ -8,8 +8,8 @@ import AuthGate from './auth/AuthGate.tsx'
 import DemoProviders from './auth/DemoProviders.tsx'
 import { isDemoMode, readDemoSession, writeDemoSession } from './auth/demo.ts'
 
-function Root() {
-  const [inDemo, setInDemo] = useState(readDemoSession)
+export function Root() {
+  const [inDemo, setInDemo] = useState(() => readDemoSession() ?? isDemoMode)
 
   const startDemo = () => {
     writeDemoSession(true)
@@ -20,20 +20,10 @@ function Root() {
     setInDemo(false)
   }
 
-  // Build-time demo-only mode: demo login screen, real auth never mounts.
-  if (isDemoMode) {
-    return (
-      <DemoProviders>
-        <App />
-      </DemoProviders>
-    )
-  }
-
-  // Runtime demo opened from "Try demo": signed in straight away, logout returns to real login.
   if (inDemo) {
     return (
-      <DemoProviders autoSignIn onExit={exitDemo}>
-        <App />
+      <DemoProviders autoSignIn={!isDemoMode} onExit={exitDemo}>
+        <App inDemo onSwitchMode={exitDemo} />
       </DemoProviders>
     )
   }
@@ -41,7 +31,7 @@ function Root() {
   return (
     <AuthProvider>
       <AuthGate onTryDemo={startDemo}>
-        <App />
+        <App onSwitchMode={startDemo} />
       </AuthGate>
     </AuthProvider>
   )

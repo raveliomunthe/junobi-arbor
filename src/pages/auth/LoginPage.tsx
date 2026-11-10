@@ -6,10 +6,12 @@ import AuthLayout from './AuthLayout'
 export default function LoginPage({
   onShowRegister,
   onTryDemo,
+  onExitDemo,
   demo = false,
 }: {
   onShowRegister?: () => void
   onTryDemo?: () => void
+  onExitDemo?: () => void
   demo?: boolean
 }) {
   const { signIn } = useAuth()
@@ -70,6 +72,15 @@ export default function LoginPage({
           className="mt-2 w-full rounded-full bg-[#2d2d2d]/10 px-4 py-2.5 text-xs font-bold text-[#2d2d2d]"
         >
           Try demo (no account needed)
+        </button>
+      )}
+      {onExitDemo && (
+        <button
+          type="button"
+          onClick={onExitDemo}
+          className="mt-2 w-full rounded-full bg-[#2d2d2d]/10 px-4 py-2.5 text-xs font-bold text-[#2d2d2d]"
+        >
+          Switch to real login
         </button>
       )}
       {demo ? (

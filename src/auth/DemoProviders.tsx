@@ -72,7 +72,7 @@ export default function DemoProviders({
       {signedIn ? (
         <WorkspaceContext.Provider value={workspaceValue}>{children}</WorkspaceContext.Provider>
       ) : (
-        <LoginPage demo />
+        <LoginPage demo onExitDemo={onExit} />
       )}
     </AuthContext.Provider>
   )

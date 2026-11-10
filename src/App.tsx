@@ -27,7 +27,7 @@ const expandedNavbarWidth = 'min(calc(111.111111vw - 2rem), 748px)'
 type NavItem = (typeof items)[number]
 type NavSlot = (typeof navSlots)[number]
 
-function AppShell() {
+function AppShell({ inDemo, onSwitchMode }: { inDemo: boolean; onSwitchMode: () => void }) {
   const { user, signOut } = useAuth()
   const unreadCount = useUnreadCount()
   const [isSigningOut, setIsSigningOut] = useState(false)
@@ -300,6 +300,14 @@ function AppShell() {
           >
             <p className="text-xs font-bold text-[#555555]">Signed in as</p>
             <p className="mt-1 truncate text-sm font-bold">{user?.email}</p>
+            <p className="mt-1 text-xs font-medium text-[#555555]">{inDemo ? 'Demo mode (local data)' : 'Real account'}</p>
+            <button
+              type="button"
+              onClick={onSwitchMode}
+              className="mt-3 w-full rounded-full bg-[#2d2d2d]/10 px-4 py-2 text-xs font-bold text-[#2d2d2d]"
+            >
+              {inDemo ? 'Switch to real account' : 'Switch to demo'}
+            </button>
             {signOutError && <p role="alert" className="mt-2 text-xs font-bold text-[#b3261e]">{signOutError}</p>}
             <button
               type="button"
@@ -528,11 +536,11 @@ function AppShell() {
 }
 
 // Local demo data is scoped per workspace, so every workspace keeps its own transactions.
-function App() {
+function App({ inDemo = false, onSwitchMode }: { inDemo?: boolean; onSwitchMode: () => void }) {
   const { activeWorkspace } = useWorkspace()
   return (
     <DataProvider scopeId={activeWorkspace?.id ?? 'local'}>
-      <AppShell />
+      <AppShell inDemo={inDemo} onSwitchMode={onSwitchMode} />
     </DataProvider>
   )
 }
