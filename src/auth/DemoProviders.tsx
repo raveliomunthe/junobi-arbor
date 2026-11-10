@@ -38,8 +38,16 @@ const workspaceValue: WorkspaceContextValue = {
   restoreWorkspace: async () => demoMessage,
 }
 
-export default function DemoProviders({ children }: { children: ReactNode }) {
-  const [signedIn, setSignedIn] = useState(false)
+export default function DemoProviders({
+  children,
+  autoSignIn = false,
+  onExit,
+}: {
+  children: ReactNode
+  autoSignIn?: boolean
+  onExit?: () => void
+}) {
+  const [signedIn, setSignedIn] = useState(autoSignIn)
   const authValue: AuthContextValue = {
     session: null,
     user: signedIn ? demoUser : null,
@@ -54,6 +62,7 @@ export default function DemoProviders({ children }: { children: ReactNode }) {
     signUp: async () => ({ error: demoMessage, needsVerification: false }),
     signOut: async () => {
       setSignedIn(false)
+      onExit?.()
       return null
     },
   }

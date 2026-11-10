@@ -3,7 +3,15 @@ import type { FormEvent } from 'react'
 import { useAuth } from '../../auth/useAuth'
 import AuthLayout from './AuthLayout'
 
-export default function LoginPage({ onShowRegister, demo = false }: { onShowRegister?: () => void; demo?: boolean }) {
+export default function LoginPage({
+  onShowRegister,
+  onTryDemo,
+  demo = false,
+}: {
+  onShowRegister?: () => void
+  onTryDemo?: () => void
+  demo?: boolean
+}) {
   const { signIn } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -55,6 +63,15 @@ export default function LoginPage({ onShowRegister, demo = false }: { onShowRegi
           {submitting ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      {onTryDemo && (
+        <button
+          type="button"
+          onClick={onTryDemo}
+          className="mt-2 w-full rounded-full bg-[#2d2d2d]/10 px-4 py-2.5 text-xs font-bold text-[#2d2d2d]"
+        >
+          Try demo (no account needed)
+        </button>
+      )}
       {demo ? (
         <p className="mt-4 text-center text-xs font-medium text-[#555555]">
           Demo account: demo@junobi.local<br />Password: demo123

@@ -50,7 +50,7 @@ function WorkspaceRouter({ children }: { children: ReactNode }) {
   return <Fragment key={activeWorkspace.id}>{children}</Fragment>
 }
 
-export default function AuthGate({ children }: { children: ReactNode }) {
+export default function AuthGate({ children, onTryDemo }: { children: ReactNode; onTryDemo?: () => void }) {
   const { user, loading } = useAuth()
   const [view, setView] = useState<'login' | 'register'>('login')
 
@@ -58,7 +58,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
 
   if (!user) {
     return view === 'login' ? (
-      <LoginPage onShowRegister={() => setView('register')} />
+      <LoginPage onShowRegister={() => setView('register')} onTryDemo={onTryDemo} />
     ) : (
       <RegisterPage onShowLogin={() => setView('login')} />
     )
